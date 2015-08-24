@@ -10,9 +10,8 @@ Installation
 ------------
 
 Not currently on ansible galaxy, so you'll need to use from github. Two ways
-you can do this, if you're using a role for your deployment (and IMHO you
-should) then you can add the following to your meta/requirements.yml
-
+you can do this, you can add the following to your meta/requirements.yml if you are
+already using a role that requires docker.
 
 ```yaml
 - src: https://github.com/ateoto/ansible-role-docker
@@ -26,7 +25,7 @@ This is how I have my ```bash ~/.ansible.cfg ``` setup for roles.
 
 ```bash
 
-roles_path = /etc/ansible/roles:/Users/ateoto/Code/ansible-roles
+roles_path = /etc/ansible/roles:/Users/ateoto/code/ansible-roles
 ```
 
 Then you could just clone to:
@@ -41,14 +40,16 @@ Usage
 -----
 
 If you specify a DOCKER_AUTH and DOCKER_EMAIL variable, this role will generate
-a .dockercfg file for you. The DOCKER_AUTH string is a base64 encoded string in
+a config.json file for you. The DOCKER_AUTH string is a base64 encoded string in
 the format of ``` DockerHubUsername:DockerHubPassword ```. To generate this
 you can either login to DockerHub locally and grab the auth string from
-``` ~/.dockercfg``` or you can use terminal.
+``` ~/.docker/config.json``` or you can use bash or a programming language of some kind.
+
+
+Example in bash:
 
 ```bash
 $ echo ateoto:t3rriblepass | base64 -i -
 YXRlb3RvOnQzcnJpYmxlcGFzcwo=
 ```
-
 

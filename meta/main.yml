@@ -7,7 +7,7 @@ galaxy_info:
   description: Installs docker-engine on Ubuntu LTS or Debian Stable
   company: "Modus Create, Inc."
   license: MIT
-  min_ansible_version: 1.7
+  min_ansible_version: 1.8
   categories:
   - system
   platforms:

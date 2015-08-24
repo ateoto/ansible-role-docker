@@ -5,9 +5,11 @@ dependencies: []
 galaxy_info:
   author: Matthew McCants
   description: Installs docker-engine on Ubuntu LTS or Debian Stable
-  company: Modus Create, Inc.
+  company: "Modus Create, Inc."
   license: MIT
   min_ansible_version: 1.7
+  categories:
+  - system
   platforms:
   - name: Ubuntu
     versions:
@@ -17,5 +19,3 @@ galaxy_info:
     versions:
     - wheezy
     - jessie
-  catgeories:
-  - system

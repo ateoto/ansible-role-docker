@@ -36,7 +36,7 @@
   with_items:
     - "linux-image-extra-{{ ansible_kernel }}"
     - linux-image-extra-virtual
-  when: fs_aufs.rc != 1 and modprobe_aufs.rc != 1
+  when: fs_aufs.rc != 0 and modprobe_aufs.rc != 0
 
 - name: Install Docker
   sudo: yes

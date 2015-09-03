@@ -1,37 +1,30 @@
 ---
 - name: Update apt cache
   apt: update_cache=yes
-  sudo: yes
 
 - name: Make sure apt can use https
-  sudo: yes
   apt: "name={{ item }} state=present"
   with_items:
     - apt-transport-https
     - ca-certificates
 
 - name: Add Apt Key for Docker
-  sudo: yes
   apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D state=present
 
 - name: Add Apt Repository for Docker
-  sudo: yes
   apt_repository: "repo='deb https://apt.dockerproject.org/repo {{ ansible_distribution | lower }}-{{ ansible_distribution_release }} main' state=present"
 
 - name: filesystems
-  sudo: yes
   ignore_errors: true
   command: grep -q aufs /proc/filesystems
   register: fs_aufs
 
 - name: modprobe
-  sudo: yes
   ignore_errors: true
   command: modprobe aufs
   register: modprobe_aufs
 
 - name: Add kernel extras for AUFS
-  sudo: yes
   apt: "name={{ item }} state=present"
   with_items:
     - "linux-image-extra-{{ ansible_kernel }}"
@@ -39,18 +32,15 @@
   when: fs_aufs.rc != 0 and modprobe_aufs.rc != 0
 
 - name: Install Docker
-  sudo: yes
   apt: "name={{ item }} state=present"
   with_items:
     - docker-engine
 
 - name: Add docker daemon configuration
-  sudo: yes
   copy: src=docker dest=/etc/default/docker
   notify: restart docker
 
 - name: Grant user access to Docker
-  sudo: yes
   user: "name={{ ansible_ssh_user }} groups=docker append=yes"
 
 - name: Create Docker config folder
@@ -59,3 +49,6 @@
 - name: Add .dockercfg for DockerHub Access
   template: "src=config.json.j2 dest=/home/{{ ansible_ssh_user }}/.docker/config.json"
   when: docker_auth is defined
+
+- include: docker_py.yml
+  when: install_docker_py

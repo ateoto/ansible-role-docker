@@ -2,7 +2,8 @@
 - name: check pip
   command: which pip
   register: which_pip
-  ignore_errors: True
+  ignore_errors: true
+  changed_when: false
 
 - name: Get Install pip
   get_url: url=https://bootstrap.pypa.io/get-pip.py dest=/home/{{ ansible_ssh_user }}/get-pip.py

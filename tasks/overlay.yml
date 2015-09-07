@@ -1,9 +1,11 @@
 ---
 - name: overlay - Fetch kernel package
-  get_url: url={{ docker_filesystem_overlay_deb }} dest=/tmp/ sha256sum={{ docker_filesystem_overlay_checksum }}
+  get_url: url={{ item.url }} dest=/tmp/ sha256sum={{ item.checksum }}
+  with_items: docker_filesystem_overlay_debs
 
 - name: overlay - Install kernel package
-  apt: deb=/tmp/{{ docker_filesystem_overlay_deb | basename }} state=installed
+  apt: deb=/tmp/{{ item.url | basename }} state=installed
+  with_items: docker_filesystem_overlay_debs
 
 - name: overlay - Reboot for new kernel
   command: shutdown -r now 'Ansible - Reboot for new kernel.'

@@ -1,0 +1,20 @@
+---
+- name: overlay - Fetch kernel package
+  get_url: url={{ docker_filesystem_overlay_deb }} dest=/tmp/ sha256sum={{ docker_filesystem_overlay_checksum }}
+
+- name: overlay - Install kernel package
+  apt: deb=/tmp/{{ docker_filesystem_overlay_deb | basename }} state=installed
+
+- name: overlay - Reboot for new kernel
+  command: shutdown -r now 'Ansible - Reboot for new kernel.'
+
+- name: overlay - Wait for reboot
+  local_action:
+    module: wait_for
+      host={{ ansible_ssh_host }}
+      port={{ ansible_ssh_port | default(22) }}
+      delay=30
+      timeout=600
+      state=started
+  become: no
+

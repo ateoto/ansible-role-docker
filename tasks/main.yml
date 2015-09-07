@@ -26,8 +26,11 @@
   command: modprobe {{ docker_filesystem }}
   register: modprobe
 
-- include: "{{ docker_filesystem }}.yml"
-  when: fs.rc != 0 and modprobe.rc != 0
+- include: aufs.yml
+  when: docker_filesystem == "aufs" and fs.rc != 0 and modprobe.rc != 0
+
+- include: overlay.yml
+  when: docker_filesystem == "overlay" and fs.rc != 0 and modprobe.rc != 0
 
 - name: Install Docker
   apt: "name={{ item }} state=present"

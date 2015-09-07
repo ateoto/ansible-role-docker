@@ -1,0 +1,6 @@
+---
+docker_filesystem: aufs
+
+docker_filesystem_overlay_deb: "http://kernel.ubuntu.com/~kernel-ppa/mainline/v3.19.8-vivid/linux-image-3.19.8-031908-generic_3.19.8-031908.201505110938_amd64.deb"
+docker_filesystem_overlay_checksum: "6e9a0731a94576a88213f7cb1f4c18172e547f5ef2f2d7a1794b7063bf3889c2"
+

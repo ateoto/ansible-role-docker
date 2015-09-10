@@ -14,22 +14,23 @@
 - name: Add Apt Repository for Docker
   apt_repository: "repo='deb https://apt.dockerproject.org/repo {{ ansible_distribution | lower }}-{{ ansible_distribution_release }} main' state=present"
 
-- name: filesystems
+- name: Check if filesystem is on /proc/filesystems
   ignore_errors: true
-  command: grep -q aufs /proc/filesystems
-  register: fs_aufs
+  changed_when: false
+  command: grep -q {{ docker_filesystem }} /proc/filesystems
+  register: fs
 
-- name: modprobe
+- name: Check if filesystem's kernel module is loaded
   ignore_errors: true
-  command: modprobe aufs
-  register: modprobe_aufs
+  changed_when: false
+  command: modprobe {{ docker_filesystem }}
+  register: modprobe
 
-- name: Add kernel extras for AUFS
-  apt: "name={{ item }} state=present"
-  with_items:
-    - "linux-image-extra-{{ ansible_kernel }}"
-    - linux-image-extra-virtual
-  when: fs_aufs.rc != 0 and modprobe_aufs.rc != 0
+- include: aufs.yml
+  when: docker_filesystem == "aufs" and fs.rc != 0 and modprobe.rc != 0
+
+- include: overlay.yml
+  when: docker_filesystem == "overlay" and fs.rc != 0 and modprobe.rc != 0
 
 - name: Install Docker
   apt: "name={{ item }} state=present"
@@ -37,7 +38,7 @@
     - docker-engine
 
 - name: Add docker daemon configuration
-  copy: src=docker dest=/etc/default/docker
+  template: src=docker.j2 dest=/etc/default/docker
   notify: restart docker
 
 - name: Grant user access to Docker

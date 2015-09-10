@@ -9,3 +9,5 @@ docker_filesystem_overlay_debs:
   - url: "http://kernel.ubuntu.com/~kernel-ppa/mainline/v3.19.8-vivid/linux-image-3.19.8-031908-generic_3.19.8-031908.201505110938_amd64.deb"
     checksum: "6e9a0731a94576a88213f7cb1f4c18172e547f5ef2f2d7a1794b7063bf3889c2"
 
+docker_filesystem_overlay_reboot: yes
+

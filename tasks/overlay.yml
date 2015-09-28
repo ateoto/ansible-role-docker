@@ -6,17 +6,20 @@
 - name: overlay - Install kernel package
   apt: deb=/tmp/{{ item.url | basename }} state=installed
   with_items: docker_filesystem_overlay_debs
+  register: kernel_updated
 
 - name: overlay - Reboot for new kernel
   command: shutdown -r now 'Ansible - Reboot for new kernel.'
+  when: docker_filesystem_overlay_reboot and kernel_updated | changed
 
 - name: overlay - Wait for reboot
   local_action:
     module: wait_for
-      host={{ ansible_ssh_host }}
-      port={{ ansible_ssh_port | default(22) }}
+      host={{ inventory_hostname }}
+      port={{ ansible_ssh_port | default(omit) }}
       delay=30
       timeout=600
       state=started
   become: no
+  when: docker_filesystem_overlay_reboot and kernel_updated | changed
 

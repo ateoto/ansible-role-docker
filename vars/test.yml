@@ -1,3 +1,4 @@
 ---
 docker_filesystem: overlay
+docker_filesystem_overlay_reboot: no
 
